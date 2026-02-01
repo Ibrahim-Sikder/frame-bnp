@@ -31,7 +31,7 @@ export default function VoteFramePreview({
     canvas.width = 1080;
     canvas.height = 1350;
 
-    // Clear canvas to prevent download sync issues
+    // Clear canvas
     ctx.clearRect(0, 0, canvas.width, canvas.height);
 
     // Load User Image
@@ -78,7 +78,11 @@ export default function VoteFramePreview({
 
     const centerX = 540;
     const centerY = 640;
-    const radius = 380;
+
+    // FIX: Reduced Radius from 380 to 360.
+    // This creates a gap so the image does NOT touch or cover the frame border.
+    // The image will stay strictly inside the frame.
+    const radius = 360;
 
     // --- STEP 1: Draw Frame (Bottom Layer) ---
     ctx.drawImage(frameImg, 0, 0, canvas.width, canvas.height);
@@ -86,7 +90,7 @@ export default function VoteFramePreview({
     // --- STEP 2: Draw User Image (Top Layer, Clipped) ---
     ctx.save();
 
-    // Create Circular Clipping Path
+    // Create Circular Clipping Path with reduced radius
     ctx.beginPath();
     ctx.arc(centerX, centerY, radius, 0, Math.PI * 2);
     ctx.clip();
@@ -104,8 +108,6 @@ export default function VoteFramePreview({
 
     ctx.drawImage(img, posX, posY, drawWidth, drawHeight);
     ctx.restore(); // Remove clip
-
-    // --- REMOVED: Border/Shadow code ---
   };
 
   return (
